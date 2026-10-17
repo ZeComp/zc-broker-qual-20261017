@@ -1,0 +1,27 @@
+name: qual-dispatch
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: success, fail ou sleep
+        required: false
+        default: success
+permissions:
+  contents: read
+jobs:
+  qual-dispatch:
+    name: qual-dispatch
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: mode
+        env:
+          MODE: ${{ inputs.mode }}
+        run: |
+          echo "qual-dispatch mode=$MODE"
+          case "$MODE" in
+            success) ;;
+            fail) exit 1 ;;
+            sleep) sleep 75 ;;
+            *) exit 2 ;;
+          esac
