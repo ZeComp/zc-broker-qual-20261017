@@ -1,0 +1,26 @@
+name: qual-ci
+on:
+  pull_request:
+    branches: [qual/target]
+    paths-ignore: ['docs-only/**']
+permissions:
+  contents: read
+jobs:
+  qual-ci:
+    name: qual-ci
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: contrôle de qualification
+        run: |
+          test ! -e qual-fail.flag
+          mkdir out
+          echo qualification > out/qual.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: qual-artifact
+          path: out/qual.txt
+          retention-days: 1
